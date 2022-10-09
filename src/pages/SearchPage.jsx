@@ -16,9 +16,9 @@ import {
 
 const SearchPage = () => {
   const [{ term }, dispatch] = useStateValue();
-  // const {data} = UseGoogleSearch(term); // LIVE CALL API YOYOYO
+   const {data} = UseGoogleSearch(term); // LIVE CALL API YOYOYO
 
-  const data = response; // LOCAL CALL API - TESLA
+  // const data = response; // LOCAL CALL API - TESLA
 
   console.log(data);
   return (
@@ -72,7 +72,35 @@ const SearchPage = () => {
           </div>
         </div>
       </div>
-      <div className="searchPage__results"></div>
+
+      {term && (
+        <div className="searchPage__results">
+          <p className="searchPage__resultsCount">
+            About {data?.searchInformation.formattedTotalResults} results (
+            {data?.searchInformation.formattedSearchTime} seconds) for {term}
+          </p>
+
+          {data?.items.map((items) => (
+            <div className="searchPage__results">
+              <a href={items.link}>
+                {items.pagemap?.cse_image?.length > 0 &&
+                  items.pagemap?.cse_image[0]?.src && (
+                    <img
+                      src={items.pagemap?.cse_image[0]?.src}
+                      alt=""
+                      className="searchPage__resultImage"
+                    />
+                  )}
+                {items.displayLink} ▽
+              </a>
+              <a href={items.link} className="searchPage__resultTitle">
+                <h2>{items.title}</h2>
+              </a>
+              <p className="searchPage__resultsSnippet">{items.snippet}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
